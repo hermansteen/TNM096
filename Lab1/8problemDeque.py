@@ -1,5 +1,6 @@
 import copy
 import time
+from collections import deque
 
 # define the initial state
 #initialState = [[1, 5, 2],
@@ -13,12 +14,12 @@ import time
 #               [1, 6, 8],
 #               [7, 5, 2]]
 
-#initialState = [[6, 4, 7],
-#               [8, 5, 0],
-#               [3, 2, 1]]
-initialState = [[8, 6, 7],
-               [2, 5, 4],
-               [3, 0, 1]]
+initialState = [[6, 4, 7],
+               [8, 5, 0],
+               [3, 2, 1]]
+#initialState = [[8, 6, 7],
+#               [2, 5, 4],
+#               [3, 0, 1]]
 
 
 # define the goal state
@@ -147,24 +148,23 @@ def compStates(state1, state2):
                             n_errors += abs(i-k) + abs(j-l)
     return n_errors """
 
-
 def astar(initial_state, goal_state):
     # define first node
     node = Node(initial_state, None, None, 0, 0)
     # define open list
-    openList = []
-    closedList = []
+    openList = deque()
+    closedList = deque()
 
     n_iterations = 0
     openList.append(node)
 
-    while (openList != []):
+    while (openList):
         n_iterations += 1
         #print("iteration: ", n_iterations)
         #print("open list: ", len(openList))
         #print("lowest f value: ", openList[0].f)
-        openList.sort(key=lambda x: x.f)
-        currentNode = openList.pop(0)
+        openList = deque(sorted(openList, key=lambda x: x.f))
+        currentNode = openList.popleft()
         # put("PRESS ENTER TO CONTINUE.")
         #print("current node: ", currentNode.printState())
         closedList.append(currentNode)
@@ -196,7 +196,6 @@ def astar(initial_state, goal_state):
                     openList.append(child)
     print("no solution")
     return None
-
 
 def main():
     print("initial state: ")
